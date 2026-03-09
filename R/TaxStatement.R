@@ -19,19 +19,13 @@ TaxStatementViewServer <- function(input,output,session,dms_token,erp_token) {
   text_TaxStatement_FOrgNumber = tsui::var_text('text_TaxStatement_FOrgNumber')
 
 
-  outputDir= getwd()
+  #outputDir= getwd()
 
-  #outputDir = '/srv/shiny-server/mdljhTaxStatementCom'
+  outputDir = '/home/shiny'
 
   original = paste0(outputDir, "/www/TaxStatement/税务报表.xlsx")
 
   shiny::observeEvent(input$btn_TaxStatement_Generate,{
-    tsui::pop_notice("getwd()")
-    tsui::pop_notice(outputDir)
-
-    tsui::pop_notice("original")
-
-    tsui::pop_notice(original)
 
     if(text_TaxStatement_FYear()=='' ||text_TaxStatement_FMonth()==''|| text_TaxStatement_FOrgNumber() ==''){
 

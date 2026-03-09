@@ -21,10 +21,13 @@ TaxStatementViewServer <- function(input,output,session,dms_token,erp_token) {
 
   #outputDir= getwd()
 
-  outputDir = '/home/shiny'
+  outputDir <- '/home/shiny/www/TaxStatement'
 
-  original = paste0(outputDir, "/www/TaxStatement/税务报表.xlsx")
+  original = paste0(outputDir, "/税务报表.xlsx")
 
+  tsui::pop_notice("outputDir")
+
+  tsui::pop_notice(outputDir)
   shiny::observeEvent(input$btn_TaxStatement_Generate,{
 
     if(text_TaxStatement_FYear()=='' ||text_TaxStatement_FMonth()==''|| text_TaxStatement_FOrgNumber() ==''){

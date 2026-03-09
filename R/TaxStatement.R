@@ -20,7 +20,8 @@ TaxStatementViewServer <- function(input,output,session,dms_token,erp_token) {
 
 
   #outputDir= getwd()
-  outputDir = '/srv/shiny-server/mdljhTaxStatementCom'
+  outputDir = '/home/srv/shiny-server/mdljhTaxStatementCom'
+
   original = paste0(outputDir, "/www/TaxStatement/税务报表.xlsx")
 
   shiny::observeEvent(input$btn_TaxStatement_Generate,{

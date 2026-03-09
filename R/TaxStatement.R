@@ -23,11 +23,9 @@ TaxStatementViewServer <- function(input,output,session,dms_token,erp_token) {
 
   outputDir <- '/home/shiny/www/TaxStatement'
 
-  original = paste0(outputDir, "/税务报表.xlsx")
+  original = file.path(outputDir, "税务报表.xlsx")
 
-  tsui::pop_notice("outputDir")
 
-  tsui::pop_notice(outputDir)
   shiny::observeEvent(input$btn_TaxStatement_Generate,{
 
     if(text_TaxStatement_FYear()=='' ||text_TaxStatement_FMonth()==''|| text_TaxStatement_FOrgNumber() ==''){
@@ -39,13 +37,34 @@ TaxStatementViewServer <- function(input,output,session,dms_token,erp_token) {
       FMonth=text_TaxStatement_FMonth()
       FOrgNumber = text_TaxStatement_FOrgNumber()
       #删除税务报表
-      file.remove(original)
+      if (file.exists(original))
+        tsui::pop_notice("删除旧税务报表")
+        file.remove(original)
 
       #生成税务报表
       mdljhTaxStatementPkg::TaxStatement_excel(erpToken = erp_token,FYear =FYear ,FMonth =FMonth,FOrgNumber =FOrgNumber,outputDir = outputDir )
 
+      # 生成报表并捕获错误
+      tryCatch({
+        mdljhTaxStatementPkg::TaxStatement_excel(
+          erpToken = erp_token,
+          FYear = FYear,
+          FMonth = FMonth,
+          FOrgNumber = FOrgNumber,
+          outputDir = outputDir
+        )
 
-      tsui::pop_notice("报表已生成")
+        # 检查文件是否生成
+        if (file.exists(original)) {
+          tsui::pop_notice("报表已生成成功")
+        } else {
+          tsui::pop_notice("报表生成失败，请查看日志")
+        }
+      }, error = function(e) {
+        tsui::pop_notice(paste("生成出错:", e$message))
+        tsui::pop_notice(e)  # 输出到 Shiny 日志
+      })
+
 
     }
 
